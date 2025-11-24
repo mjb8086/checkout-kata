@@ -22,7 +22,7 @@ interface ICheckout
 # Instructions
 Implement a class or classes that satisfies the problem described above. The solution should include unit tests, and we welcome test first approaches to it.
 
-We're as interested in the process that you go through to develop the code as the end result, so commit early and often so we can see the steps that you go through to arrive at your solution. We want to see a git repository containing your solution, ideally uploaded to your own github account. Use of AI assistance will disqualify the candidate.
+We're as interested in the process that you go through to develop the code as the end result, so commit early and often so we can see the steps that you go through to arrive at your solution. We want to see a git repository containing your solution, ideally uploaded to your own github account. 
 
 # Acknowledgements
 Adapted from http://codekata.com/kata/kata09-back-to-the-checkout/
