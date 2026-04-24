@@ -38,20 +38,23 @@ public class CheckoutService: ICheckout
         if (_basket.ContainsKey(saleableItem.SKU))
         {
             // todo - offer logic
-            _basket[saleableItem.SKU].Quantity++;
+            var itemRef = _basket[saleableItem.SKU];
+            itemRef.Quantity++;
+            itemRef.CurrentPrice = saleableItem.SalePrice * itemRef.Quantity;
         }
         else
         {
             _basket[saleableItem.SKU] = new()
             {
                 SKU = saleableItem.SKU,
-                Quantity = 1
+                Quantity = 1,
+                CurrentPrice = saleableItem.SalePrice
             };
         }
     }
 
     public decimal GetTotalPrice()
     {
-        return 0m;
+        return _basket.Values.Sum(x => x.CurrentPrice);
     }
 }
