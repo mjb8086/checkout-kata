@@ -3,27 +3,14 @@ using Checkout.Models;
 
 namespace Checkout.Main.Services;
 
-public class CheckoutService: ICheckout
+public class CheckoutService(IReadOnlyDictionary<string, SaleableItem> _inventory, IReadOnlyDictionary<string, SaleableItemOffer> _offers)
+    : ICheckout
 {
-    private IReadOnlyDictionary<string, SaleableItem> _inventory;
-    private IReadOnlyDictionary<string, SaleableItemOffer> _offers;
-    private IDictionary<string, LineItem> _basket;
-    
-    public CheckoutService(IReadOnlyDictionary<string, SaleableItem> inventory, IReadOnlyDictionary<string, SaleableItemOffer> offers)
-    {
-        _inventory = inventory;
-        _offers = offers;
-        _basket = new Dictionary<string, LineItem>();
-    }
-    
+    private readonly IDictionary<string, LineItem> _basket = new Dictionary<string, LineItem>();
+
     public void Scan(string item)
     {
-        if (_inventory.Count < 1)
-        {
-            throw new InvalidOperationException("Inventory is empty");
-        }
-
-        if (_inventory.TryGetValue(item, out SaleableItem saleableItem))
+        if (_inventory.TryGetValue(item, out var saleableItem))
         {
             AddItemToBasket(saleableItem);
         }
@@ -55,10 +42,9 @@ public class CheckoutService: ICheckout
     {
         if (_offers.TryGetValue(lineItem.SKU, out var offer))
         {
-            var numOffers = lineItem.Quantity / offer.QualifyingThreshold;
-            var numLoose = lineItem.Quantity % offer.QualifyingThreshold;
-            lineItem.CurrentPrice = offer.SpecialPrice * numOffers;
-            lineItem.CurrentPrice += numLoose * saleableItem.UnitPrice;
+            var numQualifyingItems = lineItem.Quantity / offer.QualifyingThreshold;
+            lineItem.CurrentPrice = offer.SpecialPrice * numQualifyingItems;
+            lineItem.CurrentPrice += (lineItem.Quantity % offer.QualifyingThreshold)  * saleableItem.UnitPrice;
         }
         else
         {
