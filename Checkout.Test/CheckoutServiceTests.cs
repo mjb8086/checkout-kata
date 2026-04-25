@@ -36,14 +36,112 @@ public class CheckoutServiceTests
     }
     
     [Fact]
-    public void CheckoutService_CanScanThreeA()
+    public void CheckoutService_CanScanThreeA_NoOffers()
+    {
+        var checkoutService = new CheckoutService(GetInventory(), new Dictionary<string,SaleableItemOffer>());
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        
+        Assert.Equal(150m, checkoutService.GetTotalPrice());
+    }
+    
+    [Fact]
+    public void CheckoutService_ScanVariety_NoOffers()
+    {
+        var checkoutService = new CheckoutService(GetInventory(), new Dictionary<string, SaleableItemOffer>());
+        checkoutService.Scan("A");
+        checkoutService.Scan("B");
+        checkoutService.Scan("C");
+        checkoutService.Scan("D");
+        
+        Assert.Equal(115m, checkoutService.GetTotalPrice());
+    }
+    
+    [Fact]
+    public void CheckoutService_3AFor130()
     {
         var checkoutService = new CheckoutService(GetInventory(), GetOffers());
         checkoutService.Scan("A");
         checkoutService.Scan("A");
         checkoutService.Scan("A");
         
-        Assert.Equal(150m, checkoutService.GetTotalPrice());
+        Assert.Equal(130m, checkoutService.GetTotalPrice());
+    }
+    
+    [Fact]
+    public void CheckoutService_5A()
+    {
+        var checkoutService = new CheckoutService(GetInventory(), GetOffers());
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        
+        Assert.Equal(230m, checkoutService.GetTotalPrice());
+    }
+    
+    [Fact]
+    public void CheckoutService_6A()
+    {
+        var checkoutService = new CheckoutService(GetInventory(), GetOffers());
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        
+        Assert.Equal(260m, checkoutService.GetTotalPrice());
+    }
+    
+    [Fact]
+    public void CheckoutService_2BFor45()
+    {
+        var checkoutService = new CheckoutService(GetInventory(), GetOffers());
+        checkoutService.Scan("B");
+        checkoutService.Scan("B");
+        
+        Assert.Equal(45m, checkoutService.GetTotalPrice());
+    }
+    
+    [Fact]
+    public void CheckoutService_3B()
+    {
+        var checkoutService = new CheckoutService(GetInventory(), GetOffers());
+        checkoutService.Scan("B");
+        checkoutService.Scan("B");
+        checkoutService.Scan("B");
+        
+        Assert.Equal(75m, checkoutService.GetTotalPrice());
+    }
+    
+    [Fact]
+    public void CheckoutService_2B_3A()
+    {
+        var checkoutService = new CheckoutService(GetInventory(), GetOffers());
+        checkoutService.Scan("B");
+        checkoutService.Scan("B");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        
+        Assert.Equal(175m, checkoutService.GetTotalPrice());
+    }
+    
+    [Fact]
+    public void CheckoutService_3B_3A()
+    {
+        var checkoutService = new CheckoutService(GetInventory(), GetOffers());
+        checkoutService.Scan("B");
+        checkoutService.Scan("B");
+        checkoutService.Scan("B");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        
+        Assert.Equal(205m, checkoutService.GetTotalPrice());
     }
     
     [Fact]

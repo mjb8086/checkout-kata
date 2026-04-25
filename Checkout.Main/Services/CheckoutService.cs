@@ -35,12 +35,10 @@ public class CheckoutService: ICheckout
 
     void AddItemToBasket(SaleableItem saleableItem)
     {
-        if (_basket.ContainsKey(saleableItem.SKU))
+        if (_basket.TryGetValue(saleableItem.SKU, out var lineItem))
         {
-            // todo - offer logic
-            var itemRef = _basket[saleableItem.SKU];
-            itemRef.Quantity++;
-            itemRef.CurrentPrice = saleableItem.UnitPrice * itemRef.Quantity;
+            lineItem.Quantity++;
+            ApplyOffers(lineItem, saleableItem);
         }
         else
         {
@@ -50,6 +48,21 @@ public class CheckoutService: ICheckout
                 Quantity = 1,
                 CurrentPrice = saleableItem.UnitPrice
             };
+        }
+    }
+
+    void ApplyOffers(LineItem lineItem, SaleableItem saleableItem)
+    {
+        if (_offers.TryGetValue(lineItem.SKU, out var offer))
+        {
+            var numOffers = lineItem.Quantity / offer.QualifyingThreshold;
+            var numLoose = lineItem.Quantity % offer.QualifyingThreshold;
+            lineItem.CurrentPrice = offer.SpecialPrice * numOffers;
+            lineItem.CurrentPrice += numLoose * saleableItem.UnitPrice;
+        }
+        else
+        {
+            lineItem.CurrentPrice = saleableItem.UnitPrice * lineItem.Quantity;
         }
     }
 
