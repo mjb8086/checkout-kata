@@ -40,7 +40,7 @@ public class CheckoutService: ICheckout
             // todo - offer logic
             var itemRef = _basket[saleableItem.SKU];
             itemRef.Quantity++;
-            itemRef.CurrentPrice = saleableItem.SalePrice * itemRef.Quantity;
+            itemRef.CurrentPrice = saleableItem.UnitPrice * itemRef.Quantity;
         }
         else
         {
@@ -48,7 +48,7 @@ public class CheckoutService: ICheckout
             {
                 SKU = saleableItem.SKU,
                 Quantity = 1,
-                CurrentPrice = saleableItem.SalePrice
+                CurrentPrice = saleableItem.UnitPrice
             };
         }
     }
