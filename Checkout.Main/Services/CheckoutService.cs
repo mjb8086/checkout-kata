@@ -20,7 +20,7 @@ public class CheckoutService: ICheckout
     {
         if (_inventory.Count < 1)
         {
-            throw new Exception("Inventory is empty");
+            throw new InvalidOperationException("Inventory is empty");
         }
 
         if (_inventory.TryGetValue(item, out SaleableItem saleableItem))
@@ -29,7 +29,7 @@ public class CheckoutService: ICheckout
         }
         else
         {
-            throw new Exception("Item not found in inventory.");
+            throw new KeyNotFoundException("Item not found in inventory.");
         }
     }
 

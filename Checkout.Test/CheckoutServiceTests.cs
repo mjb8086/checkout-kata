@@ -34,4 +34,22 @@ public class CheckoutServiceTests
         
         Assert.Equal(50m, checkoutService.GetTotalPrice());
     }
+    
+    [Fact]
+    public void CheckoutService_CanScanThreeA()
+    {
+        var checkoutService = new CheckoutService(GetInventory(), GetOffers());
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        checkoutService.Scan("A");
+        
+        Assert.Equal(150m, checkoutService.GetTotalPrice());
+    }
+    
+    [Fact]
+    public void CheckoutService_TryScanningInvalid()
+    {
+        var checkoutService = new CheckoutService(GetInventory(), GetOffers());
+        Assert.Throws<KeyNotFoundException>(() => checkoutService.Scan("AAAA-NOT_EXISTENT"));
+    }
 }
